@@ -9,7 +9,7 @@ class WhiteFoxStudios_Plugin extends WhiteFoxStudios_LifeCycle {
      * See: http://plugin.michael-simpson.com/?page_id=31
      * @return array of option meta data.
      */
-    public function getOptionMetaData() {
+    public function getOptionMetaData() {/*
         //  http://plugin.michael-simpson.com/?page_id=31
         return array(
             //'_version' => array('Installed Version'), // Leave this one commented-out. Uncomment to test upgrades.
@@ -18,7 +18,7 @@ class WhiteFoxStudios_Plugin extends WhiteFoxStudios_LifeCycle {
             'CanDoSomething' => array(__('Which user role can do something', 'my-awesome-plugin'),
                                         'Administrator', 'Editor', 'Author', 'Contributor', 'Subscriber', 'Anyone')
         );
-    }
+    /**/}
 
 //    protected function getOptionValueI18nString($optionValue) {
 //        $i18nValue = parent::getOptionValueI18nString($optionValue);
@@ -92,6 +92,15 @@ class WhiteFoxStudios_Plugin extends WhiteFoxStudios_LifeCycle {
         //            wp_enqueue_style('my-style', plugins_url('/css/my-style.css', __FILE__));
         //        }
 
+        if(strpos($_SERVER['REQUEST_URI'], $this->getSettingsSlug()) !== false){
+            wp_enqueue_style('white-fox-studios-settings-css', plugins_url('/css/wfs-settings.css', __FILE__));
+            wp_enqueue_script('white-fox-studios-settings-js', plugins_url('/js/wfs-settings.js', __FILE__), array('jquery'), null, true);
+        }
+
+        if(strpos($_SERVER['REQUEST_URI'], 'wp-admin') !== false){
+            wp_enqueue_style('white-fox-studios-admin-css', plugins_url('/css/wfs-admin.css', __FILE__));
+            wp_enqueue_script('white-fox-studios-admin-js', plugins_url('/js/wfs-admin.js', __FILE__), array('jquery'), null, true);
+        }
 
         // Add Actions & Filters
         // http://plugin.michael-simpson.com/?page_id=37

@@ -79,52 +79,59 @@ class WhiteFoxStudios_Plugin extends WhiteFoxStudios_LifeCycle {
     public function upgrade() {
     }
 
+    public function getAdminNotices() {
+      global $pagenow;
+      if($pagenow == 'index.php'): ?>
+        <div class="notice wfs-admin-notice wfs-dashboard-notice">
+        	<a href="https://whitefoxstudios.net/"><img src="<?php echo plugins_url('/img/logo-black.png', __FILE__); ?>" class="wfs-dash-logo"> <span class="dash-slogan">Data beats opinions!</span></a>
+        </div><?
+      endif;
+    }
+
     public function addActionsAndFilters() {
 
-        // Add options administration page
-        // http://plugin.michael-simpson.com/?page_id=47
-        add_action('admin_menu', array(&$this, 'addSettingsSubMenuPage'));
+      // Add options administration page
+      // http://plugin.michael-simpson.com/?page_id=47
+      add_action('admin_menu', array(&$this, 'addSettingsSubMenuPage'));
 
-        // Example adding a script & style just for the options administration page
-        // http://plugin.michael-simpson.com/?page_id=47
-        //        if (strpos($_SERVER['REQUEST_URI'], $this->getSettingsSlug()) !== false) {
-        //            wp_enqueue_script('my-script', plugins_url('/js/my-script.js', __FILE__));
-        //            wp_enqueue_style('my-style', plugins_url('/css/my-style.css', __FILE__));
-        //        }
+      ////////////////////////////////////////////////
+      // Add Actions & Filters
+      // http://plugin.michael-simpson.com/?page_id=37
+      ////////////////////////////////////////////////
+      
+      // Admin Assets
+      if(strpos($_SERVER['REQUEST_URI'], 'wp-admin')){
+        wp_enqueue_style('white-fox-studios-admin-css', plugins_url('/css/wfs-admin.css', __FILE__));
+        wp_enqueue_script('white-fox-studios-admin-js', plugins_url('/js/wfs-admin.js', __FILE__), array('jquery'), null, true);
+      }
+      
+      // Settings Page Assets
+      global $pagenow;
+      if($pagenow == $this->getSettingsSlug()){
+        wp_enqueue_style('white-fox-studios-settings-css', plugins_url('/css/wfs-settings.css', __FILE__));
+        wp_enqueue_script('white-fox-studios-settings-js', plugins_url('/js/wfs-settings.js', __FILE__), array('jquery'), null, true);
+      }
+      
+      // Dashboard Assets
+      if($pagenow == 'index.php'){
+        wp_enqueue_style('white-fox-studios-dashboard-css', plugins_url('/css/wfs-dashboard.css', __FILE__));
+        wp_enqueue_script('white-fox-studios-dashboard-js', plugins_url('/js/wfs-dashboard.js', __FILE__), array('jquery'), null, true);
+      }
 
-        if(strpos($_SERVER['REQUEST_URI'], $this->getSettingsSlug())){
-            wp_enqueue_style('white-fox-studios-settings-css', plugins_url('/css/wfs-settings.css', __FILE__));
-            wp_enqueue_script('white-fox-studios-settings-js', plugins_url('/js/wfs-settings.js', __FILE__), array('jquery'), null, true);
-        }
-
-        if(strpos($_SERVER['REQUEST_URI'], 'wp-admin')){
-            wp_enqueue_style('white-fox-studios-admin-css', plugins_url('/css/wfs-admin.css', __FILE__));
-            wp_enqueue_script('white-fox-studios-admin-js', plugins_url('/js/wfs-admin.js', __FILE__), array('jquery'), null, true);
-        }
-
-        // Add Actions & Filters
-        // http://plugin.michael-simpson.com/?page_id=37
-
-        add_action('admin_notices', array(&$this, 'adminDashboardNotice'));
-
-
-        // Adding scripts & styles to all pages
-        // Examples:
-        //        wp_enqueue_script('jquery');
-        //        wp_enqueue_style('my-style', plugins_url('/css/my-style.css', __FILE__));
-        //        wp_enqueue_script('my-script', plugins_url('/js/my-script.js', __FILE__));
+      add_action('admin_notices', array(&$this, 'getAdminNotices'));
 
 
-        // Register short codes
-        // http://plugin.michael-simpson.com/?page_id=39
+      ////////////////////////////////////////////////
+      // Register short codes
+      // http://plugin.michael-simpson.com/?page_id=39
+      ////////////////////////////////////////////////
 
 
-        // Register AJAX hooks
-        // http://plugin.michael-simpson.com/?page_id=41
+      ////////////////////////////////////////////////
+      // Register AJAX hooks
+      // http://plugin.michael-simpson.com/?page_id=41
+      ////////////////////////////////////////////////
 
     }
 
-    public function adminDashboardNotice() {
-        return '<div class="notice notice-info wfs-admin-notice wfs-dashboard-notice"><img src="https://thebestseoblog.com/wp-content/uploads/2020/02/logo-final-2048x306.png"></div>';
-    }
 }

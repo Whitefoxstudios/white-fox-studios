@@ -92,18 +92,20 @@ class WhiteFoxStudios_Plugin extends WhiteFoxStudios_LifeCycle {
         //            wp_enqueue_style('my-style', plugins_url('/css/my-style.css', __FILE__));
         //        }
 
-        if(strpos($_SERVER['REQUEST_URI'], $this->getSettingsSlug()) !== false){
+        if(strpos($_SERVER['REQUEST_URI'], $this->getSettingsSlug())){
             wp_enqueue_style('white-fox-studios-settings-css', plugins_url('/css/wfs-settings.css', __FILE__));
             wp_enqueue_script('white-fox-studios-settings-js', plugins_url('/js/wfs-settings.js', __FILE__), array('jquery'), null, true);
         }
 
-        if(strpos($_SERVER['REQUEST_URI'], 'wp-admin') !== false){
+        if(strpos($_SERVER['REQUEST_URI'], 'wp-admin')){
             wp_enqueue_style('white-fox-studios-admin-css', plugins_url('/css/wfs-admin.css', __FILE__));
             wp_enqueue_script('white-fox-studios-admin-js', plugins_url('/js/wfs-admin.js', __FILE__), array('jquery'), null, true);
         }
 
         // Add Actions & Filters
         // http://plugin.michael-simpson.com/?page_id=37
+
+        add_action('admin_notices', array(&$this, 'adminDashboardNotice'));
 
 
         // Adding scripts & styles to all pages
@@ -122,5 +124,7 @@ class WhiteFoxStudios_Plugin extends WhiteFoxStudios_LifeCycle {
 
     }
 
-
+    public function adminDashboardNotice() {
+        return '<div class="notice notice-info wfs-admin-notice wfs-dashboard-notice"><img src="https://thebestseoblog.com/wp-content/uploads/2020/02/logo-final-2048x306.png"></div>';
+    }
 }
